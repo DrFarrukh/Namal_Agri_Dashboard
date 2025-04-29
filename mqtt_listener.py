@@ -37,6 +37,7 @@ def on_message(client, userdata, msg):
         payload_str = msg.payload.decode('utf-8').strip()
         logging.info(f"Received message: {payload_str}")
         
+        import ast
         try:
             # Try to parse the JSON directly
             data = json.loads(payload_str)
@@ -47,9 +48,15 @@ def on_message(client, userdata, msg):
                 data = json.loads(json.loads(payload_str))
                 logging.info("JSON parsed successfully (double decode)")
             except Exception as e2:
-                logging.error(f"Double-decoding also failed: {str(e2)}")
-                logging.error(f"Raw payload bytes: {msg.payload}")
-                return
+                logging.warning(f"Double-decoding also failed: {str(e2)}. Attempting to unescape and decode...")
+                try:
+                    unescaped = ast.literal_eval(f"'{payload_str}'")
+                    data = json.loads(unescaped)
+                    logging.info("JSON parsed successfully (after unescape)")
+                except Exception as e3:
+                    logging.error(f"Unescape and decode also failed: {str(e3)}")
+                    logging.error(f"Raw payload bytes: {msg.payload}")
+                    return
         
         # Create a normalized data dictionary with lowercase keys
         normalized_data = {}
