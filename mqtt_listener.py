@@ -40,11 +40,16 @@ def on_message(client, userdata, msg):
         try:
             # Try to parse the JSON directly
             data = json.loads(payload_str)
-            logging.info("JSON parsed successfully")
+            logging.info("JSON parsed successfully (single decode)")
         except json.JSONDecodeError as e:
-            logging.error(f"Failed to parse JSON: {str(e)}")
-            logging.error(f"Raw payload bytes: {msg.payload}")
-            return
+            logging.warning(f"First JSON decode failed: {str(e)}. Attempting second decode (double-encoded payload)...")
+            try:
+                data = json.loads(json.loads(payload_str))
+                logging.info("JSON parsed successfully (double decode)")
+            except Exception as e2:
+                logging.error(f"Double-decoding also failed: {str(e2)}")
+                logging.error(f"Raw payload bytes: {msg.payload}")
+                return
         
         # Create a normalized data dictionary with lowercase keys
         normalized_data = {}
