@@ -1,0 +1,119 @@
+Traceback (most recent call last):
+  File "/home/namal/Namal_Agri_Dashboard/mqtt_listener.py", line 1, in <module>
+    import paho.mqtt.client as mqtt
+ModuleNotFoundError: No module named 'paho'
+Traceback (most recent call last):
+  File "/home/namal/Namal_Agri_Dashboard/mqtt_listener.py", line 1, in <module>
+    import paho.mqtt.client as mqtt
+ModuleNotFoundError: No module named 'paho'
+Traceback (most recent call last):
+  File "/home/namal/Namal_Agri_Dashboard/mqtt_listener.py", line 1, in <module>
+    import paho.mqtt.client as mqtt
+ModuleNotFoundError: No module named 'paho'
+Traceback (most recent call last):
+  File "/home/namal/Namal_Agri_Dashboard/mqtt_listener.py", line 1, in <module>
+    import paho.mqtt.client as mqtt
+ModuleNotFoundError: No module named 'paho'
+Traceback (most recent call last):
+  File "/home/namal/Namal_Agri_Dashboard/mqtt_listener.py", line 1, in <module>
+    import paho.mqtt.client as mqtt
+ModuleNotFoundError: No module named 'paho'
+Traceback (most recent call last):
+  File "/home/namal/Namal_Agri_Dashboard/mqtt_listener.py", line 1, in <module>
+    import paho.mqtt.client as mqtt
+ModuleNotFoundError: No module named 'paho'
+Traceback (most recent call last):
+  File "/home/namal/Namal_Agri_Dashboard/mqtt_listener.py", line 1, in <module>
+    import paho.mqtt.client as mqtt
+ModuleNotFoundError: No module named 'paho'
+Traceback (most recent call last):
+  File "/home/namal/Namal_Agri_Dashboard/mqtt_listener.py", line 1, in <module>
+    import paho.mqtt.client as mqtt
+ModuleNotFoundError: No module named 'paho'
+Traceback (most recent call last):
+  File "/home/namal/Namal_Agri_Dashboard/mqtt_listener.py", line 1, in <module>
+    import paho.mqtt.client as mqtt
+ModuleNotFoundError: No module named 'paho'
+Traceback (most recent call last):
+  File "/home/namal/Namal_Agri_Dashboard/mqtt_listener.py", line 1, in <module>
+    import paho.mqtt.client as mqtt
+ModuleNotFoundError: No module named 'paho'
+Traceback (most recent call last):
+  File "/home/namal/Namal_Agri_Dashboard/mqtt_listener.py", line 1, in <module>
+    import paho.mqtt.client as mqtt
+ModuleNotFoundError: No module named 'paho'
+Traceback (most recent call last):
+  File "/home/namal/Namal_Agri_Dashboard/mqtt_listener.py", line 1, in <module>
+    import paho.mqtt.client as mqtt
+ModuleNotFoundError: No module named 'paho'
+Traceback (most recent call last):
+  File "/home/namal/Namal_Agri_Dashboard/mqtt_listener.py", line 1, in <module>
+    import paho.mqtt.client as mqtt
+ModuleNotFoundError: No module named 'paho'
+Traceback (most recent call last):
+  File "/home/namal/Namal_Agri_Dashboard/mqtt_listener.py", line 1, in <module>
+    import paho.mqtt.client as mqtt
+ModuleNotFoundError: No module named 'paho'
+Traceback (most recent call last):
+  File "/home/namal/Namal_Agri_Dashboard/mqtt_listener.py", line 1, in <module>
+    import paho.mqtt.client as mqtt
+ModuleNotFoundError: No module named 'paho'
+/home/namal/Namal_Agri_Dashboard/mqtt_listener.py:117: DeprecationWarning: Callback API version 1 is deprecated, update to latest version
+  client = mqtt.Client()
+2025-07-16 11:55:28,848 - INFO - Connecting to broker at localhost:1883
+2025-07-16 11:55:28,848 - INFO - Connected with result code 0
+/home/namal/Namal_Agri_Dashboard/mqtt_listener.py:117: DeprecationWarning: Callback API version 1 is deprecated, update to latest version
+  client = mqtt.Client()
+2025-07-16 11:55:39,084 - INFO - Connecting to broker at localhost:1883
+2025-07-16 11:55:39,084 - INFO - Connected with result code 0
+2025-07-16 11:55:46,969 - INFO - Received message: {"crop_number":2,"mac_address":"00:14:22:01:23:45","date":"2025-07-11","time":"11:05:00","soil_moisture":50000,"soil_nitrogen":10,"soil_phosphorus":5,"soil_potassium":20,"soil_temperature":28,"soil_humidity":65,"soil_ph":6.8,"air_temperature":32,"air_humidity":70}
+2025-07-16 11:55:46,970 - INFO - JSON parsed successfully (single decode)
+2025-07-16 11:55:46,973 - INFO - Data saved to CSV and JSON: {'crop_number': 2, 'mac_address': '00:14:22:01:23:45', 'date': '2025-07-11', 'time': '11:05:00', 'soil_moisture': 50000, 'soil_nitrogen': 10, 'soil_phosphorus': 5, 'soil_potassium': 20, 'soil_temperature': 28, 'soil_humidity': 65, 'soil_ph': 6.8, 'air_temperature': 32, 'air_humidity': 70, 'timestamp': 1752648946.9706714}
+2025-07-16 11:55:55,720 - INFO - Received message: {"crop_number":2,"Mac_Address":"F4:65:0B:54:74:58","soil_moisture":21.00,"soil_nitrogen":11,"soil_phosphorus":14,"soil_potassium":37,"soil_temperature":23.30,"soil_humidity":21.00,"soil_ph":8.10,"air_temperature":25.40,"air_humidity":44.60}
+2025-07-16 11:55:55,720 - INFO - JSON parsed successfully (single decode)
+2025-07-16 11:55:55,722 - INFO - Data saved to CSV and JSON: {'crop_number': 2, 'mac_address': 'F4:65:0B:54:74:58', 'soil_moisture': 21.0, 'soil_nitrogen': 11, 'soil_phosphorus': 14, 'soil_potassium': 37, 'soil_temperature': 23.3, 'soil_humidity': 21.0, 'soil_ph': 8.1, 'air_temperature': 25.4, 'air_humidity': 44.6, 'timestamp': 1752648955.720716, 'date': None, 'time': None}
+2025-07-16 11:56:37,105 - INFO - Received message: {"crop_number":2,"Mac_Address":"F4:65:0B:54:74:58","soil_moisture":21.00,"soil_nitrogen":11,"soil_phosphorus":14,"soil_potassium":37,"soil_temperature":23.40,"soil_humidity":21.00,"soil_ph":8.10,"air_temperature":25.40,"air_humidity":44.70}
+2025-07-16 11:56:37,105 - INFO - JSON parsed successfully (single decode)
+2025-07-16 11:56:37,108 - INFO - Data saved to CSV and JSON: {'crop_number': 2, 'mac_address': 'F4:65:0B:54:74:58', 'soil_moisture': 21.0, 'soil_nitrogen': 11, 'soil_phosphorus': 14, 'soil_potassium': 37, 'soil_temperature': 23.4, 'soil_humidity': 21.0, 'soil_ph': 8.1, 'air_temperature': 25.4, 'air_humidity': 44.7, 'timestamp': 1752648997.105879, 'date': None, 'time': None}
+2025-07-16 11:57:18,489 - INFO - Received message: {"crop_number":2,"Mac_Address":"F4:65:0B:54:74:58","soil_moisture":21.00,"soil_nitrogen":11,"soil_phosphorus":14,"soil_potassium":37,"soil_temperature":23.40,"soil_humidity":21.00,"soil_ph":8.10,"air_temperature":25.40,"air_humidity":44.60}
+2025-07-16 11:57:18,489 - INFO - JSON parsed successfully (single decode)
+2025-07-16 11:57:18,491 - INFO - Data saved to CSV and JSON: {'crop_number': 2, 'mac_address': 'F4:65:0B:54:74:58', 'soil_moisture': 21.0, 'soil_nitrogen': 11, 'soil_phosphorus': 14, 'soil_potassium': 37, 'soil_temperature': 23.4, 'soil_humidity': 21.0, 'soil_ph': 8.1, 'air_temperature': 25.4, 'air_humidity': 44.6, 'timestamp': 1752649038.4894772, 'date': None, 'time': None}
+2025-07-16 11:57:59,875 - INFO - Received message: {"crop_number":2,"Mac_Address":"F4:65:0B:54:74:58","soil_moisture":21.00,"soil_nitrogen":11,"soil_phosphorus":14,"soil_potassium":37,"soil_temperature":23.40,"soil_humidity":21.00,"soil_ph":8.10,"air_temperature":25.40,"air_humidity":44.80}
+2025-07-16 11:57:59,876 - INFO - JSON parsed successfully (single decode)
+2025-07-16 11:57:59,878 - INFO - Data saved to CSV and JSON: {'crop_number': 2, 'mac_address': 'F4:65:0B:54:74:58', 'soil_moisture': 21.0, 'soil_nitrogen': 11, 'soil_phosphorus': 14, 'soil_potassium': 37, 'soil_temperature': 23.4, 'soil_humidity': 21.0, 'soil_ph': 8.1, 'air_temperature': 25.4, 'air_humidity': 44.8, 'timestamp': 1752649079.8762977, 'date': None, 'time': None}
+2025-07-16 11:58:04,173 - INFO - Received message: {"crop_number":2,"mac_address":"00:14:22:01:23:45","date":"2025-07-11","time":"11:05:00","soil_moisture":50000,"soil_nitrogen":10,"soil_phosphorus":5,"soil_potassium":20,"soil_temperature":28,"soil_humidity":65,"soil_ph":6.8,"air_temperature":32,"air_humidity":70}
+2025-07-16 11:58:04,173 - INFO - JSON parsed successfully (single decode)
+2025-07-16 11:58:04,175 - INFO - Data saved to CSV and JSON: {'crop_number': 2, 'mac_address': '00:14:22:01:23:45', 'date': '2025-07-11', 'time': '11:05:00', 'soil_moisture': 50000, 'soil_nitrogen': 10, 'soil_phosphorus': 5, 'soil_potassium': 20, 'soil_temperature': 28, 'soil_humidity': 65, 'soil_ph': 6.8, 'air_temperature': 32, 'air_humidity': 70, 'timestamp': 1752649084.1734564}
+2025-07-16 11:58:41,257 - INFO - Received message: {"crop_number":2,"Mac_Address":"F4:65:0B:54:74:58","soil_moisture":21.00,"soil_nitrogen":11,"soil_phosphorus":14,"soil_potassium":37,"soil_temperature":23.30,"soil_humidity":21.00,"soil_ph":8.10,"air_temperature":25.40,"air_humidity":44.60}
+2025-07-16 11:58:41,258 - INFO - JSON parsed successfully (single decode)
+2025-07-16 11:58:41,262 - INFO - Data saved to CSV and JSON: {'crop_number': 2, 'mac_address': 'F4:65:0B:54:74:58', 'soil_moisture': 21.0, 'soil_nitrogen': 11, 'soil_phosphorus': 14, 'soil_potassium': 37, 'soil_temperature': 23.3, 'soil_humidity': 21.0, 'soil_ph': 8.1, 'air_temperature': 25.4, 'air_humidity': 44.6, 'timestamp': 1752649121.2600021, 'date': None, 'time': None}
+2025-07-16 11:59:22,641 - INFO - Received message: {"crop_number":2,"Mac_Address":"F4:65:0B:54:74:58","soil_moisture":20.80,"soil_nitrogen":11,"soil_phosphorus":14,"soil_potassium":37,"soil_temperature":23.30,"soil_humidity":20.80,"soil_ph":8.10,"air_temperature":25.40,"air_humidity":44.60}
+2025-07-16 11:59:22,641 - INFO - JSON parsed successfully (single decode)
+2025-07-16 11:59:22,644 - INFO - Data saved to CSV and JSON: {'crop_number': 2, 'mac_address': 'F4:65:0B:54:74:58', 'soil_moisture': 20.8, 'soil_nitrogen': 11, 'soil_phosphorus': 14, 'soil_potassium': 37, 'soil_temperature': 23.3, 'soil_humidity': 20.8, 'soil_ph': 8.1, 'air_temperature': 25.4, 'air_humidity': 44.6, 'timestamp': 1752649162.6420174, 'date': None, 'time': None}
+2025-07-16 12:00:04,042 - INFO - Received message: {"crop_number":2,"Mac_Address":"F4:65:0B:54:74:58","soil_moisture":21.00,"soil_nitrogen":11,"soil_phosphorus":14,"soil_potassium":37,"soil_temperature":23.40,"soil_humidity":21.00,"soil_ph":8.00,"air_temperature":25.40,"air_humidity":44.90}
+2025-07-16 12:00:04,042 - INFO - JSON parsed successfully (single decode)
+2025-07-16 12:00:04,045 - INFO - Data saved to CSV and JSON: {'crop_number': 2, 'mac_address': 'F4:65:0B:54:74:58', 'soil_moisture': 21.0, 'soil_nitrogen': 11, 'soil_phosphorus': 14, 'soil_potassium': 37, 'soil_temperature': 23.4, 'soil_humidity': 21.0, 'soil_ph': 8.0, 'air_temperature': 25.4, 'air_humidity': 44.9, 'timestamp': 1752649204.0427196, 'date': None, 'time': None}
+2025-07-16 12:00:45,418 - INFO - Received message: {"crop_number":2,"Mac_Address":"F4:65:0B:54:74:58","soil_moisture":21.00,"soil_nitrogen":11,"soil_phosphorus":14,"soil_potassium":37,"soil_temperature":23.30,"soil_humidity":21.00,"soil_ph":8.00,"air_temperature":25.40,"air_humidity":44.90}
+2025-07-16 12:00:45,418 - INFO - JSON parsed successfully (single decode)
+2025-07-16 12:00:45,421 - INFO - Data saved to CSV and JSON: {'crop_number': 2, 'mac_address': 'F4:65:0B:54:74:58', 'soil_moisture': 21.0, 'soil_nitrogen': 11, 'soil_phosphorus': 14, 'soil_potassium': 37, 'soil_temperature': 23.3, 'soil_humidity': 21.0, 'soil_ph': 8.0, 'air_temperature': 25.4, 'air_humidity': 44.9, 'timestamp': 1752649245.4186835, 'date': None, 'time': None}
+2025-07-16 12:01:26,796 - INFO - Received message: {"crop_number":2,"Mac_Address":"F4:65:0B:54:74:58","soil_moisture":20.80,"soil_nitrogen":11,"soil_phosphorus":14,"soil_potassium":37,"soil_temperature":23.40,"soil_humidity":20.80,"soil_ph":8.00,"air_temperature":25.40,"air_humidity":44.80}
+2025-07-16 12:01:26,796 - INFO - JSON parsed successfully (single decode)
+2025-07-16 12:01:26,801 - INFO - Data saved to CSV and JSON: {'crop_number': 2, 'mac_address': 'F4:65:0B:54:74:58', 'soil_moisture': 20.8, 'soil_nitrogen': 11, 'soil_phosphorus': 14, 'soil_potassium': 37, 'soil_temperature': 23.4, 'soil_humidity': 20.8, 'soil_ph': 8.0, 'air_temperature': 25.4, 'air_humidity': 44.8, 'timestamp': 1752649286.7989113, 'date': None, 'time': None}
+2025-07-16 12:02:08,180 - INFO - Received message: {"crop_number":2,"Mac_Address":"F4:65:0B:54:74:58","soil_moisture":20.80,"soil_nitrogen":11,"soil_phosphorus":14,"soil_potassium":37,"soil_temperature":23.30,"soil_humidity":20.80,"soil_ph":8.00,"air_temperature":25.50,"air_humidity":44.90}
+2025-07-16 12:02:08,180 - INFO - JSON parsed successfully (single decode)
+2025-07-16 12:02:08,185 - INFO - Data saved to CSV and JSON: {'crop_number': 2, 'mac_address': 'F4:65:0B:54:74:58', 'soil_moisture': 20.8, 'soil_nitrogen': 11, 'soil_phosphorus': 14, 'soil_potassium': 37, 'soil_temperature': 23.3, 'soil_humidity': 20.8, 'soil_ph': 8.0, 'air_temperature': 25.5, 'air_humidity': 44.9, 'timestamp': 1752649328.1825747, 'date': None, 'time': None}
+2025-07-16 12:02:49,566 - INFO - Received message: {"crop_number":2,"Mac_Address":"F4:65:0B:54:74:58","soil_moisture":20.90,"soil_nitrogen":11,"soil_phosphorus":14,"soil_potassium":37,"soil_temperature":23.30,"soil_humidity":20.90,"soil_ph":8.00,"air_temperature":25.50,"air_humidity":45.10}
+2025-07-16 12:02:49,566 - INFO - JSON parsed successfully (single decode)
+2025-07-16 12:02:49,569 - INFO - Data saved to CSV and JSON: {'crop_number': 2, 'mac_address': 'F4:65:0B:54:74:58', 'soil_moisture': 20.9, 'soil_nitrogen': 11, 'soil_phosphorus': 14, 'soil_potassium': 37, 'soil_temperature': 23.3, 'soil_humidity': 20.9, 'soil_ph': 8.0, 'air_temperature': 25.5, 'air_humidity': 45.1, 'timestamp': 1752649369.5664122, 'date': None, 'time': None}
+2025-07-16 12:03:30,982 - INFO - Received message: {"crop_number":2,"Mac_Address":"F4:65:0B:54:74:58","soil_moisture":20.80,"soil_nitrogen":11,"soil_phosphorus":14,"soil_potassium":37,"soil_temperature":23.30,"soil_humidity":20.80,"soil_ph":8.00,"air_temperature":25.50,"air_humidity":45.40}
+2025-07-16 12:03:30,983 - INFO - JSON parsed successfully (single decode)
+2025-07-16 12:03:30,986 - INFO - Data saved to CSV and JSON: {'crop_number': 2, 'mac_address': 'F4:65:0B:54:74:58', 'soil_moisture': 20.8, 'soil_nitrogen': 11, 'soil_phosphorus': 14, 'soil_potassium': 37, 'soil_temperature': 23.3, 'soil_humidity': 20.8, 'soil_ph': 8.0, 'air_temperature': 25.5, 'air_humidity': 45.4, 'timestamp': 1752649410.983124, 'date': None, 'time': None}
+2025-07-16 12:04:12,334 - INFO - Received message: {"crop_number":2,"Mac_Address":"F4:65:0B:54:74:58","soil_moisture":20.90,"soil_nitrogen":11,"soil_phosphorus":14,"soil_potassium":37,"soil_temperature":23.30,"soil_humidity":20.90,"soil_ph":8.00,"air_temperature":25.50,"air_humidity":45.60}
+2025-07-16 12:04:12,334 - INFO - JSON parsed successfully (single decode)
+2025-07-16 12:04:12,337 - INFO - Data saved to CSV and JSON: {'crop_number': 2, 'mac_address': 'F4:65:0B:54:74:58', 'soil_moisture': 20.9, 'soil_nitrogen': 11, 'soil_phosphorus': 14, 'soil_potassium': 37, 'soil_temperature': 23.3, 'soil_humidity': 20.9, 'soil_ph': 8.0, 'air_temperature': 25.5, 'air_humidity': 45.6, 'timestamp': 1752649452.3345907, 'date': None, 'time': None}
+2025-07-16 12:04:53,716 - INFO - Received message: {"crop_number":2,"Mac_Address":"F4:65:0B:54:74:58","soil_moisture":20.80,"soil_nitrogen":11,"soil_phosphorus":14,"soil_potassium":37,"soil_temperature":23.30,"soil_humidity":20.80,"soil_ph":8.00,"air_temperature":25.50,"air_humidity":45.90}
+2025-07-16 12:04:53,716 - INFO - JSON parsed successfully (single decode)
+2025-07-16 12:04:53,720 - INFO - Data saved to CSV and JSON: {'crop_number': 2, 'mac_address': 'F4:65:0B:54:74:58', 'soil_moisture': 20.8, 'soil_nitrogen': 11, 'soil_phosphorus': 14, 'soil_potassium': 37, 'soil_temperature': 23.3, 'soil_humidity': 20.8, 'soil_ph': 8.0, 'air_temperature': 25.5, 'air_humidity': 45.9, 'timestamp': 1752649493.7170103, 'date': None, 'time': None}
+2025-07-16 12:05:35,107 - INFO - Received message: {"crop_number":2,"Mac_Address":"F4:65:0B:54:74:58","soil_moisture":20.90,"soil_nitrogen":11,"soil_phosphorus":14,"soil_potassium":37,"soil_temperature":23.40,"soil_humidity":20.90,"soil_ph":8.00,"air_temperature":25.50,"air_humidity":45.60}
+2025-07-16 12:05:35,107 - INFO - JSON parsed successfully (single decode)
+2025-07-16 12:05:35,109 - INFO - Data saved to CSV and JSON: {'crop_number': 2, 'mac_address': 'F4:65:0B:54:74:58', 'soil_moisture': 20.9, 'soil_nitrogen': 11, 'soil_phosphorus': 14, 'soil_potassium': 37, 'soil_temperature': 23.4, 'soil_humidity': 20.9, 'soil_ph': 8.0, 'air_temperature': 25.5, 'air_humidity': 45.6, 'timestamp': 1752649535.1074803, 'date': None, 'time': None}

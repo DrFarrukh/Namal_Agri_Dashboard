@@ -606,5 +606,53 @@
     "timestamp": 1752649410.983124,
     "date": null,
     "time": null
+  },
+  {
+    "crop_number": 2,
+    "mac_address": "F4:65:0B:54:74:58",
+    "soil_moisture": 20.9,
+    "soil_nitrogen": 11,
+    "soil_phosphorus": 14,
+    "soil_potassium": 37,
+    "soil_temperature": 23.3,
+    "soil_humidity": 20.9,
+    "soil_ph": 8.0,
+    "air_temperature": 25.5,
+    "air_humidity": 45.6,
+    "timestamp": 1752649452.3345907,
+    "date": null,
+    "time": null
+  },
+  {
+    "crop_number": 2,
+    "mac_address": "F4:65:0B:54:74:58",
+    "soil_moisture": 20.8,
+    "soil_nitrogen": 11,
+    "soil_phosphorus": 14,
+    "soil_potassium": 37,
+    "soil_temperature": 23.3,
+    "soil_humidity": 20.8,
+    "soil_ph": 8.0,
+    "air_temperature": 25.5,
+    "air_humidity": 45.9,
+    "timestamp": 1752649493.7170103,
+    "date": null,
+    "time": null
+  },
+  {
+    "crop_number": 2,
+    "mac_address": "F4:65:0B:54:74:58",
+    "soil_moisture": 20.9,
+    "soil_nitrogen": 11,
+    "soil_phosphorus": 14,
+    "soil_potassium": 37,
+    "soil_temperature": 23.4,
+    "soil_humidity": 20.9,
+    "soil_ph": 8.0,
+    "air_temperature": 25.5,
+    "air_humidity": 45.6,
+    "timestamp": 1752649535.1074803,
+    "date": null,
+    "time": null
   }
 ]

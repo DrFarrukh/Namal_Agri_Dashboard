@@ -1,0 +1,16 @@
+[Unit]
+Description=MQTT Listener for Agri Dashboard
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/namal/Namal_Agri_Dashboard
+ExecStart=/usr/bin/python3 /home/namal/Namal_Agri_Dashboard/mqtt_listener.py
+Restart=always
+RestartSec=5
+Environment="PYTHONUNBUFFERED=1"
+StandardOutput=append:/home/namal/Namal_Agri_Dashboard/mqtt.log
+StandardError=append:/home/namal/Namal_Agri_Dashboard/mqtt_error.log
+
+[Install]
+WantedBy=multi-user.target
