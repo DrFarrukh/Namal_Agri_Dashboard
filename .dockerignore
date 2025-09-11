@@ -1,0 +1,10 @@
+core
+venv
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.swp
+*.tmp
+*.log
+.git

@@ -10,7 +10,7 @@ import os
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # MQTT Broker Details
-broker_address = "localhost"  # Change this to your MQTT broker address (10.0.0.164)
+broker_address = "mqtt_broker"   # use Docker service name
 port = 1883
 topic = "agri_sensor/data"
 

@@ -1,0 +1,25 @@
+version: "3.9"
+services:
+  dashboard:
+    build: .
+    platform: linux/arm64
+    ports:
+      - "8501:8501"
+    command: streamlit run streamlit_app.py --server.port=8501 --server.address=0.0.0.0
+    depends_on:
+      - mqtt_broker
+
+  mqtt_listener:
+    build: .
+    platform: linux/arm64
+    command: python mqtt_listener.py
+    depends_on:
+      - mqtt_broker
+
+  mqtt_broker:
+    image: eclipse-mosquitto:2
+    platform: linux/arm64
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
