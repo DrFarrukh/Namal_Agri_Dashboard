@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agri Sensor Dashboard</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌱 Namal Agricultural Dashboard</h1>
+            <p>Powered by Electrical Engineering Department</p>
+        </header>
+        <main>
+            <div id="latest-data" class="latest-data-grid">
+                <!-- Sensor data will be dynamically inserted here -->
+            </div>
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <canvas id="temp-humidity-chart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="soil-nutrients-chart"></canvas>
+                </div>
+                 <div class="chart-container">
+                    <canvas id="soil-moisture-chart"></canvas>
+                </div>
+                 <div class="chart-container">
+                    <canvas id="soil-ph-chart"></canvas>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="/static/js/script.js"></script>
+</body>
+</html>

@@ -43,9 +43,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # This is done after dependency installation to optimize build caching
 COPY . .
 
-# Expose the port that Streamlit will run on
-EXPOSE 8501
+# Expose the port Gunicorn will run on
+EXPOSE 5000
 
-# Set default command to run Streamlit application
-# This can be overridden by docker-compose service configuration
-CMD ["streamlit", "run", "streamlit_app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+# Run the app
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]
