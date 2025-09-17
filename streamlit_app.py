@@ -7,6 +7,10 @@ import numpy as np
 from datetime import datetime, timedelta
 import time
 import os
+import pytz
+
+
+pk_tz = pytz.timezone("Asia/Karachi")
 
 # Set page config
 st.set_page_config(
@@ -73,7 +77,7 @@ def get_optimal_ranges():
         "soil_phosphorus": (5, 15),
         "soil_potassium": (15, 30),
         "soil_temperature": (20, 30),
-        "soil_humidity": (50, 80),
+        "soil_conductivity": (50, 80),
         "soil_ph": (6.0, 7.5),
         "air_temperature": (20, 35),
         "air_humidity": (50, 85)
@@ -166,7 +170,14 @@ df = load_data()
 
 # Filter data based on selected timeframe
 if df is not None and len(df) > 0:
-    now = datetime.now()
+    # now = datetime.now()
+    now = datetime.now(pk_tz)
+    # Convert timestamps in df to timezone-aware (if needed)
+    if df['timestamp'].dtype == 'datetime64[ns]':
+        df['timestamp'] = df['timestamp'].dt.tz_localize('UTC').dt.tz_convert(pk_tz)
+    else:
+        df['timestamp'] = pd.to_datetime(df['timestamp'], utc=True).dt.tz_convert(pk_tz)
+
     if timeframe == "Last hour":
         df = df[df['timestamp'] > (now - timedelta(hours=1))]
     elif timeframe == "Last 6 hours":
@@ -199,8 +210,32 @@ if page == "Dashboard":
     if df is not None and len(df) > 0:
         # Top metrics section
         latest = df.iloc[-1]
-        last_update = latest['timestamp'].strftime("%Y-%m-%d %H:%M:%S")
-        st.write(f"Last updated: {last_update}")
+        timestamp = latest['timestamp']
+
+        if isinstance(timestamp, (float, int)):
+            utc_dt = datetime.utcfromtimestamp(timestamp).replace(tzinfo=pytz.utc)
+        elif isinstance(timestamp, datetime):
+            if timestamp.tzinfo is None:
+                utc_dt = timestamp.replace(tzinfo=pytz.utc)
+            else:
+                utc_dt = timestamp.astimezone(pytz.utc)
+        else:
+            try:
+                # If it's a pandas Timestamp without tzinfo
+                utc_dt = timestamp.tz_localize('UTC')
+            except:
+                utc_dt = datetime.utcnow().replace(tzinfo=pytz.utc)
+
+        # Convert to Pakistan Time
+        pkt = pytz.timezone("Asia/Karachi")
+        last_update = utc_dt.astimezone(pkt).strftime("%Y-%m-%d %H:%M:%S")
+
+        st.write(f"🕒 Last updated (PKT): {last_update}")
+
+
+        # latest = df.iloc[-1]
+        # last_update = latest['timestamp'].strftime("%Y-%m-%d %H:%M:%S")
+        # st.write(f"Last updated: {last_update}")
         
         # Key metrics in 3 columns
         col1, col2, col3 = st.columns(3)
@@ -259,7 +294,7 @@ if page == "Dashboard":
         fig = make_subplots(rows=9, cols=1, 
                    subplot_titles=("Soil Moisture", 
                           "Soil Temperature", 
-                          "Soil Humidity",
+                          "Soil Conductivity",
                           "Soil Nitrogen",
                           "Soil Phosphorus",
                           "Soil Potassium",
@@ -283,8 +318,8 @@ if page == "Dashboard":
         
         # Soil Humidity
         fig.add_trace(go.Scatter(
-            x=df['timestamp'], y=df['soil_humidity'],
-            name="Soil Humidity", line=dict(color="purple")
+            x=df['timestamp'], y=df['soil_conductivity'],
+            name="Soil Conductivity", line=dict(color="purple")
         ), row=3, col=1)
         
         # Soil Nitrogen
@@ -348,7 +383,7 @@ elif page == "Detailed Analysis":
         selected_param = st.sidebar.selectbox(
             "Select parameter to analyze",
             ["soil_moisture", "soil_nitrogen", "soil_phosphorus", "soil_potassium", 
-             "soil_temperature", "soil_humidity", "soil_ph", "air_temperature", "air_humidity"]
+             "soil_temperature", "soil_conductivity", "soil_ph", "air_temperature", "air_humidity"]
         )
         
         # Statistical summary
@@ -547,7 +582,7 @@ else:
     - **Soil Phosphorus**: Amount of phosphorus in the soil (mg/kg)
     - **Soil Potassium**: Amount of potassium in the soil (mg/kg)
     - **Soil Temperature**: Temperature of the soil (°C)
-    - **Soil Humidity**: Humidity level of the soil (%)
+    - **Soil Conductivity**: Conductivity level of the soil (%)
     - **Soil pH**: Acidity/alkalinity of the soil
     
     #### Air Parameters

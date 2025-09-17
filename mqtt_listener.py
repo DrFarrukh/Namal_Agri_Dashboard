@@ -18,7 +18,7 @@ topic = "agri_sensor/data"
 csv_file = "sensor_data.csv"
 json_file = "sensor_data.json"
 fieldnames = ["timestamp", "mac_address", "crop_number", "date", "time", "soil_moisture", "soil_nitrogen", "soil_phosphorus", 
-              "soil_potassium", "soil_temperature", "soil_humidity", "soil_ph", "air_temperature", "air_humidity"]
+              "soil_potassium", "soil_temperature", "soil_conductivity", "soil_ph", "air_temperature", "air_humidity"]
 
 # Initialize CSV file with header if it doesn't exist
 try:
