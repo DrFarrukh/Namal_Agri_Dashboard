@@ -29,3 +29,63 @@ ValueError: dict contains fields not in fieldnames: 'soil_humidity'
     raise ValueError("dict contains fields not in fieldnames: "
 ValueError: dict contains fields not in fieldnames: 'soil_humidity'
 
+2025-09-17 10:17:43,553 - INFO - Received message: {"crop_number":2,"Mac_Address":"F4:65:0B:54:74:58","soil_moisture":27.40,"soil_nitrogen":12,"soil_phosphorus":16,"soil_potassium":42,"soil_temperature":30.60,"soil_humidity":0.00,"soil_ph":7.90,"air_temperature":31.20,"air_humidity":50.20}
+2025-09-17 10:17:43,554 - INFO - JSON parsed successfully (single decode)
+2025-09-17 10:17:43,554 - ERROR - Error processing message: dict contains fields not in fieldnames: 'soil_humidity'
+2025-09-17 10:17:43,554 - ERROR - Traceback (most recent call last):
+  File "/home/namal/Namal_Agri_Dashboard/mqtt_listener.py", line 79, in on_message
+    writer.writerow(normalized_data)
+  File "/usr/lib/python3.8/csv.py", line 154, in writerow
+    return self.writer.writerow(self._dict_to_list(rowdict))
+  File "/usr/lib/python3.8/csv.py", line 149, in _dict_to_list
+    raise ValueError("dict contains fields not in fieldnames: "
+ValueError: dict contains fields not in fieldnames: 'soil_humidity'
+
+2025-09-17 10:18:54,951 - INFO - Received message: {"crop_number":2,"Mac_Address":"F4:65:0B:54:74:58","soil_moisture":27.30,"soil_nitrogen":12,"soil_phosphorus":16,"soil_potassium":42,"soil_temperature":30.70,"soil_humidity":0.00,"soil_ph":7.90,"air_temperature":31.20,"air_humidity":50.00}
+2025-09-17 10:18:54,952 - INFO - JSON parsed successfully (single decode)
+2025-09-17 10:18:54,952 - ERROR - Error processing message: dict contains fields not in fieldnames: 'soil_humidity'
+2025-09-17 10:18:54,952 - ERROR - Traceback (most recent call last):
+  File "/home/namal/Namal_Agri_Dashboard/mqtt_listener.py", line 79, in on_message
+    writer.writerow(normalized_data)
+  File "/usr/lib/python3.8/csv.py", line 154, in writerow
+    return self.writer.writerow(self._dict_to_list(rowdict))
+  File "/usr/lib/python3.8/csv.py", line 149, in _dict_to_list
+    raise ValueError("dict contains fields not in fieldnames: "
+ValueError: dict contains fields not in fieldnames: 'soil_humidity'
+
+2025-09-17 10:20:06,323 - INFO - Received message: {"crop_number":2,"Mac_Address":"F4:65:0B:54:74:58","soil_moisture":27.30,"soil_nitrogen":12,"soil_phosphorus":16,"soil_potassium":42,"soil_temperature":30.70,"soil_humidity":0.00,"soil_ph":7.90,"air_temperature":31.20,"air_humidity":49.90}
+2025-09-17 10:20:06,324 - INFO - JSON parsed successfully (single decode)
+2025-09-17 10:20:06,324 - ERROR - Error processing message: dict contains fields not in fieldnames: 'soil_humidity'
+2025-09-17 10:20:06,324 - ERROR - Traceback (most recent call last):
+  File "/home/namal/Namal_Agri_Dashboard/mqtt_listener.py", line 79, in on_message
+    writer.writerow(normalized_data)
+  File "/usr/lib/python3.8/csv.py", line 154, in writerow
+    return self.writer.writerow(self._dict_to_list(rowdict))
+  File "/usr/lib/python3.8/csv.py", line 149, in _dict_to_list
+    raise ValueError("dict contains fields not in fieldnames: "
+ValueError: dict contains fields not in fieldnames: 'soil_humidity'
+
+2025-09-17 10:21:17,700 - INFO - Received message: {"crop_number":2,"Mac_Address":"F4:65:0B:54:74:58","soil_moisture":27.30,"soil_nitrogen":12,"soil_phosphorus":16,"soil_potassium":42,"soil_temperature":30.60,"soil_humidity":0.00,"soil_ph":7.90,"air_temperature":31.20,"air_humidity":49.80}
+2025-09-17 10:21:17,700 - INFO - JSON parsed successfully (single decode)
+2025-09-17 10:21:17,701 - ERROR - Error processing message: dict contains fields not in fieldnames: 'soil_humidity'
+2025-09-17 10:21:17,701 - ERROR - Traceback (most recent call last):
+  File "/home/namal/Namal_Agri_Dashboard/mqtt_listener.py", line 79, in on_message
+    writer.writerow(normalized_data)
+  File "/usr/lib/python3.8/csv.py", line 154, in writerow
+    return self.writer.writerow(self._dict_to_list(rowdict))
+  File "/usr/lib/python3.8/csv.py", line 149, in _dict_to_list
+    raise ValueError("dict contains fields not in fieldnames: "
+ValueError: dict contains fields not in fieldnames: 'soil_humidity'
+
+2025-09-17 10:22:29,082 - INFO - Received message: {"crop_number":2,"Mac_Address":"F4:65:0B:54:74:58","soil_moisture":27.40,"soil_nitrogen":12,"soil_phosphorus":16,"soil_potassium":42,"soil_temperature":30.50,"soil_humidity":0.00,"soil_ph":7.90,"air_temperature":31.20,"air_humidity":49.40}
+2025-09-17 10:22:29,082 - INFO - JSON parsed successfully (single decode)
+2025-09-17 10:22:29,082 - ERROR - Error processing message: dict contains fields not in fieldnames: 'soil_humidity'
+2025-09-17 10:22:29,082 - ERROR - Traceback (most recent call last):
+  File "/home/namal/Namal_Agri_Dashboard/mqtt_listener.py", line 79, in on_message
+    writer.writerow(normalized_data)
+  File "/usr/lib/python3.8/csv.py", line 154, in writerow
+    return self.writer.writerow(self._dict_to_list(rowdict))
+  File "/usr/lib/python3.8/csv.py", line 149, in _dict_to_list
+    raise ValueError("dict contains fields not in fieldnames: "
+ValueError: dict contains fields not in fieldnames: 'soil_humidity'
+

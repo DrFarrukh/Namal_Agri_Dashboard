@@ -1,65 +1,139 @@
-# Project Description
+# Namal Agri Dashboard
 
-This project comprises three main components working together to collect, store, and visualize agricultural sensor data. It uses MQTT for real-time data ingestion, CSV for data storage, and Streamlit for creating an interactive dashboard.
+This project provides a comprehensive solution for collecting, storing, and visualizing agricultural sensor data in real-time. It consists of an MQTT listener to capture sensor data, a Streamlit web application for data visualization, and setup scripts for easy deployment.
 
--   **`mqtt_listener.py`**: A Python script that acts as an MQTT client, subscribing to a specified topic (`agri_sensor/data`) on an MQTT broker (default: `localhost`). It receives sensor data in JSON format over MQTT and saves it to a CSV file (`sensor_data.csv`). This script is designed to handle potential invalid JSON formats by attempting to fix them before parsing. It also includes logging for debugging and monitoring.
+## Features
 
--   **`sensor_data.csv`**: This CSV (Comma Separated Values) file serves as the data storage for the sensor readings. Each row in the CSV represents a sensor data point, with columns for timestamp and various sensor parameters such as soil moisture, temperature, humidity, pH, and nutrient levels (nitrogen, phosphorus, potassium), as well as air temperature and humidity. The CSV file is initialized with a header row containing these field names.
+-   **Real-time Data Ingestion**: An MQTT listener subscribes to a topic to receive sensor data from IoT devices.
+-   **Robust Data Parsing**: The listener can handle various JSON formats, including double-encoded and unescaped strings.
+-   **Data Storage**: Sensor data is stored in both CSV (`sensor_data.csv`) and JSON (`sensor_data.json`) formats.
+-   **Interactive Dashboard**: A multi-page Streamlit application visualizes the data with interactive charts, gauges, and metrics.
+-   **Automated Setup**: Shell scripts are provided to automate the setup of the MQTT listener and Streamlit dashboard as systemd services.
 
--   **`streamlit_app.py`**: A Python script that builds an interactive web dashboard using the Streamlit framework. This application reads the `sensor_data.csv` file and provides real-time visualization and analysis of the sensor data. The dashboard is designed with multiple pages for different levels of data exploration:
-    -   **Dashboard**: Provides a high-level overview with key metrics displayed as gauges and metric cards, along with interactive time series charts for trend analysis and insightful summaries.
-    -   **Detailed Analysis**: Allows users to delve deeper into specific sensor parameters, offering statistical summaries, time series analysis with moving averages, correlation heatmaps, distribution histograms, and scatter plot matrices.
-    -   **Historical Data**: Enables users to explore historical data within specific date ranges, compare parameters over time, aggregate data by different time intervals (hour, day, week), and export filtered data to CSV or JSON formats.
-    -   **About**: Provides a description of the dashboard, the parameters monitored, the data collection process, and the technologies used in the project.
+## Prerequisites
 
-## Usage
+Before you begin, ensure you have the following installed on your system:
 
-1.  **Start the MQTT Broker**: Ensure an MQTT broker (like Mosquitto) is running, especially if modifying `broker_address` in `mqtt_listener.py`. If using the default `localhost`, Mosquitto should be running locally.
-
-2.  **Run `mqtt_listener.py`**: Execute this script to begin listening for MQTT messages.
+-   Python 3.8 or higher
+-   `pip` (Python package installer)
+-   `git` (for cloning the repository)
+-   An MQTT broker (e.g., Mosquitto). You can install it on Debian/Ubuntu with:
     ```bash
-    python mqtt_listener.py
+    sudo apt update
+    sudo apt install -y mosquitto mosquitto-clients
     ```
-    This script will continuously run and append new sensor data to `sensor_data.csv` as it arrives via MQTT.
 
-3.  **Run `streamlit_app.py`**: Execute this script to launch the Streamlit dashboard.
+## Setup and Installation
+
+Follow these steps to set up and run the project:
+
+### 1. Clone the Repository
+
+Clone this repository to your local machine:
+
+```bash
+git clone https://github.com/DrFarrukh/Namal_Agri_Dashboard.git
+cd Namal_Agri_Dashboard
+```
+
+### 2. Install Python Dependencies
+
+Install the required Python libraries using the `requirements.txt` file:
+
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Set Up the MQTT Listener
+
+The MQTT listener is responsible for capturing and storing the sensor data. You can run it as a background service or in a `screen` session.
+
+#### Option A: Run as a `systemd` Service (Recommended for Production)
+
+If you have `sudo` privileges, you can set up the MQTT listener as a `systemd` service that will run automatically in the background.
+
+1.  **Run the setup script**:
+
+    ```bash
+    sudo ./setup_mqtt_listener.sh
+    ```
+
+2.  **Verify the service is running**:
+
+    ```bash
+    systemctl status mqtt-listener.service
+    ```
+
+3.  **View logs**:
+
+    Logs are stored in `mqtt.log` and `mqtt_error.log` in the project directory.
+
+#### Option B: Run in a `screen` Session (for Development)
+
+If you don't have `sudo` privileges or prefer to run the listener manually, you can use `screen`.
+
+1.  **Start a new `screen` session**:
+
+    ```bash
+    screen -S mqtt_listener
+    ```
+
+2.  **Run the listener script**:
+
+    ```bash
+    python3 mqtt_listener.py
+    ```
+
+3.  **Detach from the session**: Press `Ctrl+A` then `D` to leave the script running in the background.
+
+4.  **Re-attach to the session**:
+
+    ```bash
+    screen -r mqtt_listener
+    ```
+
+### 4. Set Up the Streamlit Dashboard
+
+The Streamlit dashboard provides a web interface to visualize the sensor data. You can deploy it as a service with NGINX or run it locally for development.
+
+#### Option A: Deploy with NGINX and `systemd` (Recommended for Production)
+
+This method sets up the Streamlit app as a `systemd` service and uses NGINX as a reverse proxy, making the dashboard accessible on port 80.
+
+1.  **Run the setup script**:
+
+    ```bash
+    sudo ./setup_agri_dashboard.sh
+    ```
+
+2.  **Access the dashboard**: Open your web browser and navigate to your server's IP address (e.g., `http://<your_server_ip>`).
+
+#### Option B: Run Locally (for Development)
+
+To run the Streamlit app locally for development or testing:
+
+1.  **Run the Streamlit command**:
+
     ```bash
     streamlit run streamlit_app.py
     ```
-    This command will open the dashboard in your web browser (usually at `http://localhost:8501`).
 
-4.  **Access the Dashboard**: Open your web browser and go to the address provided by Streamlit in the terminal (usually `http://localhost:8501`). You can then navigate through the different pages of the dashboard to view real-time sensor data, perform detailed analysis, and explore historical trends.
+2.  **Access the dashboard**: Open your web browser and navigate to the URL provided by Streamlit (usually `http://localhost:8501`).
 
-## Files Description
+## File Descriptions
 
--   **`mqtt_listener.py`**:
-    -   Subscribes to the `agri_sensor/data` MQTT topic.
-    -   Connects to the MQTT broker at `localhost:1883` (configurable).
-    -   Receives sensor data in JSON format.
-    -   Handles potential JSONDecodeErrors and attempts to fix common formatting issues.
-    -   Validates incoming data structure to ensure all expected fields are present.
-    -   Appends valid sensor data to `sensor_data.csv`, including a timestamp.
-    -   Uses logging for information, warnings, and errors.
+-   `mqtt_listener.py`: The Python script that listens for MQTT messages and saves them.
+-   `streamlit_app.py`: The main application file for the Streamlit dashboard.
+-   `requirements.txt`: A list of Python dependencies for the project.
+-   `sensor_data.csv`: CSV file for storing sensor data.
+-   `sensor_data.json`: JSON file for storing sensor data.
+-   `setup_agri_dashboard.sh`: A shell script to automate the deployment of the Streamlit dashboard.
+-   `setup_mqtt_listener.sh`: A shell script to set up the MQTT listener as a `systemd` service.
+-   `mqtt-listener.service`: A `systemd` service file for the MQTT listener.
+-   `.gitignore`: Specifies files and directories to be ignored by Git.
 
--   **`sensor_data.csv`**:
-    -   CSV file storing sensor data.
-    -   Columns: `timestamp`, `soil_moisture`, `soil_nitrogen`, `soil_phosphorus`, `soil_potassium`, `soil_temperature`, `soil_humidity`, `soil_ph`, `air_temperature`, `air_humidity`.
-    -   Data is appended to this file by `mqtt_listener.py`.
-    -   Read by `streamlit_app.py` for visualization and analysis.
+## Troubleshooting
 
--   **`streamlit_app.py`**:
-    -   Streamlit application for visualizing sensor data from `sensor_data.csv`.
-    -   Provides a multi-page dashboard with:
-        -   Real-time dashboard with gauges and metric displays.
-        -   Detailed analysis page with statistical summaries, time series, correlations, and distributions.
-        -   Historical data exploration with date range filtering, aggregation, and export options.
-        -   About page with project information.
-    -   Includes features like:
-        -   Data filtering by timeframe.
-        -   Auto-refresh option for real-time updates.
-        -   Interactive charts using Plotly.
-        -   Data export to CSV and JSON.
-        -   Responsive layout and custom CSS styling.
-
-
-This project provides a comprehensive solution for monitoring agricultural sensor data, from data collection and storage to interactive visualization and analysis, enabling users to gain valuable insights into field conditions.
+-   **`streamlit run` command not found**: Ensure you have installed the dependencies from `requirements.txt` and that the `streamlit` executable is in your system's `PATH`.
+-   **MQTT connection errors**: Check that your MQTT broker is running and that the `broker_address` and `port` in `mqtt_listener.py` are correct.
+-   **Dashboard not updating**: Verify that the `mqtt_listener.py` script is running and that new data is being written to `sensor_data.json`.
