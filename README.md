@@ -8,28 +8,34 @@ This project provides a comprehensive solution for collecting, storing, and visu
 
 -   **Real-time Data Ingestion**: An MQTT listener subscribes to a topic to receive sensor data from IoT devices.
 -   **Robust Data Parsing**: The listener can handle various JSON formats, including double-encoded and unescaped strings.
+-   **Data Validation**: Real-time validation of sensor readings against scientific ranges - invalid data is rejected before storage.
+-   **Data Quality Assurance**: Built-in validation ensures all stored data is within acceptable physical/scientific ranges.
 -   **Dual Data Storage**: Sensor data is stored in both CSV (`sensor_data.csv`) and JSON (`sensor_data.json`) formats for flexibility.
 -   **Interactive Dashboard**: A multi-page Streamlit application visualizes the data with interactive charts, gauges, and metrics.
 -   **Multi-Page Interface**: Dashboard, Detailed Analysis, Historical Data, and About pages.
 -   **Pakistan Time Support**: All timestamps displayed in Pakistan Standard Time (PKT).
 -   **Data Export**: Export filtered data to CSV or JSON formats.
 -   **Automated Insights**: AI-powered recommendations based on sensor readings and optimal ranges.
+-   **Data Cleaning Tools**: Utility script to clean existing data by removing duplicates and invalid values.
 -   **Automated Setup**: Shell scripts are provided to automate the setup of the MQTT listener and Streamlit dashboard as systemd services.
 
 ## Monitored Parameters
 
 ### Soil Parameters
--   **Soil Moisture**: Water content percentage (0-100%)
--   **Soil Nitrogen**: Nitrogen content (mg/kg)
--   **Soil Phosphorus**: Phosphorus content (mg/kg)
--   **Soil Potassium**: Potassium content (mg/kg)
--   **Soil Temperature**: Temperature in Celsius (°C)
--   **Soil Conductivity**: Electrical conductivity (µS/cm)
--   **Soil pH**: Acidity/alkalinity level (4-9 scale)
+-   **Soil Moisture**: Water content percentage (Validated: 0-100%)
+-   **Soil Nitrogen**: Nitrogen content (Validated: 0-200 mg/kg)
+-   **Soil Phosphorus**: Phosphorus content (Validated: 0-150 mg/kg)
+-   **Soil Potassium**: Potassium content (Validated: 0-500 mg/kg)
+-   **Soil Temperature**: Temperature in Celsius (Validated: -10 to 60°C)
+-   **Soil Conductivity**: Electrical conductivity (Validated: 0-200 mS/cm)
+-   **Soil pH**: Acidity/alkalinity level (Validated: 3.0-10.0 pH)
 
 ### Air Parameters
--   **Air Temperature**: Ambient temperature (°C)
--   **Air Humidity**: Relative humidity percentage (%)
+-   **Air Temperature**: Ambient temperature (Validated: -40 to 60°C)
+-   **Air Humidity**: Relative humidity percentage (Validated: 0-100%)
+
+### Data Validation
+All sensor readings are validated in real-time before storage. Values outside the specified ranges are **rejected and logged** to maintain data integrity for accurate analysis and machine learning applications.
 
 ## Prerequisites
 
@@ -143,16 +149,26 @@ To run the Streamlit app locally for development or testing:
 
 ## File Descriptions
 
--   `mqtt_listener.py`: The Python script that listens for MQTT messages and saves them to both CSV and JSON files.
--   `streamlit_app.py`: The main application file for the Streamlit dashboard with multi-page interface.
--   `requirements.txt`: A list of Python dependencies for the project (paho-mqtt, streamlit, pandas, plotly, numpy, pytz).
--   `sensor_data.csv`: CSV file for storing sensor data (auto-generated).
--   `sensor_data.json`: JSON file for storing sensor data (auto-generated).
--   `setup_agri_dashboard.sh`: A shell script to automate the deployment of the Streamlit dashboard with NGINX.
--   `setup_mqtt_listener.sh`: A shell script to set up the MQTT listener as a `systemd` service.
--   `mqtt-listener.service`: A `systemd` service file for the MQTT listener.
+### Core Application Files
+-   `mqtt_listener.py`: MQTT listener with real-time data validation - rejects invalid sensor readings.
+-   `streamlit_app.py`: Multi-page Streamlit dashboard with interactive visualizations and AI insights.
+-   `clean_sensor_data.py`: Utility script to clean existing data files (remove duplicates, invalid values, outliers).
+-   `requirements.txt`: Python dependencies (paho-mqtt, streamlit, pandas, plotly, numpy, pytz).
+
+### Data Files
+-   `sensor_data.csv`: Validated sensor data in CSV format (18,839 clean records).
+-   `sensor_data.json`: Validated sensor data in JSON format (18,839 clean records).
+-   `sensor_data_backup.csv`: Backup of original data before cleaning.
+-   `sensor_data_backup.json`: Backup of original data before cleaning.
+
+### Deployment Scripts
+-   `setup_agri_dashboard.sh`: Automates Streamlit dashboard deployment with NGINX.
+-   `setup_mqtt_listener.sh`: Sets up MQTT listener as a systemd service.
+-   `mqtt-listener.service`: Systemd service configuration for MQTT listener.
+
+### Assets
 -   `agri_img.jpg`: Dashboard image asset.
--   `.gitignore`: Specifies files and directories to be ignored by Git.
+-   `.gitignore`: Git ignore rules.
 
 ## Dashboard Pages
 
@@ -231,6 +247,27 @@ sudo systemctl restart nginx
     - Use database backend (PostgreSQL/InfluxDB) for better performance
     - Optimize by filtering data in dashboard queries
 
+## Data Quality & Validation
+
+### Real-time Validation
+The MQTT listener validates all incoming sensor data against scientific ranges:
+- Values outside acceptable ranges are **rejected and not stored**
+- Validation errors are logged for debugging
+- MAC addresses must follow standard format (XX:XX:XX:XX:XX:XX)
+
+### Data Cleaning
+Run the cleaning script on existing data:
+```bash
+python3 clean_sensor_data.py
+```
+This script:
+- Removes duplicate records
+- Filters out invalid/out-of-range values
+- Creates backups before cleaning
+- Provides detailed cleaning statistics
+
+**Current Dataset**: 18,839 validated records from 3 sensor nodes
+
 ## Configuration
 
 ### MQTT Broker Settings
@@ -240,6 +277,9 @@ broker_address = "localhost"  # Change to your MQTT broker IP
 port = 1883                    # Default MQTT port
 topic = "agri_sensor/data"    # MQTT topic to subscribe
 ```
+
+### Validation Ranges
+Modify `VALIDATION_RANGES` in `mqtt_listener.py` to adjust acceptable sensor value ranges.
 
 ### Dashboard Settings
 The dashboard auto-refreshes by default. You can configure:

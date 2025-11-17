@@ -54,20 +54,23 @@ REFRESH_INTERVAL = 5  # seconds
 
 # Helper functions
 def load_data():
-    try:
-        df = pd.read_json(JSON_FILE)
-        df['timestamp'] = pd.to_datetime(df['timestamp'], unit='s')
-        df = df.sort_values('timestamp')
-        return df
-    except FileNotFoundError:
-        st.error("Sensor data file not found. Please ensure the MQTT listener is running.")
-        return None
-    except ValueError:
-        st.warning("Sensor data file is empty or invalid. Please wait for data to be collected.")
-        return None
-    except Exception as e:
-        st.error(f"An error occurred: {e}")
-        return None
+    @st.cache_data(show_spinner=False)
+    def _load():
+        try:
+            df = pd.read_json(JSON_FILE)
+            df['timestamp'] = pd.to_datetime(df['timestamp'], unit='s')
+            df = df.sort_values('timestamp')
+            return df
+        except FileNotFoundError:
+            st.error("Sensor data file not found. Please ensure the MQTT listener is running.")
+            return None
+        except ValueError:
+            st.warning("Sensor data file is empty or invalid. Please wait for data to be collected.")
+            return None
+        except Exception as e:
+            st.error(f"An error occurred: {e}")
+            return None
+    return _load()
 
 def get_optimal_ranges():
     # Define optimal ranges for each parameter
@@ -153,16 +156,29 @@ st.sidebar.image("https://namal.edu.pk/uploads/logo22869383.png", width=100) # A
 page = st.sidebar.radio("Navigation", ["Dashboard", "Detailed Analysis", "Historical Data", "About"])
 
 # Auto-refresh option
-auto_refresh = st.sidebar.checkbox("Auto-refresh", value=True)
+auto_refresh = st.sidebar.checkbox("Auto-refresh", value=False)
 if auto_refresh:
     refresh_interval = st.sidebar.slider("Refresh interval (seconds)", 5, 60, REFRESH_INTERVAL)
     st.sidebar.write(f"Refreshing every {refresh_interval} seconds")
 
 # Data timeframe
+
+# Crop number filter
+crop_number = st.sidebar.selectbox(
+    "Crop Number (filter)",
+    ["All"] + sorted(set(pd.read_json(JSON_FILE)["crop_number"]))
+)
+
+# Sensor type filter
+sensor_type = st.sidebar.selectbox(
+    "Sensor Type (filter)",
+    ["All", "soil_moisture", "soil_nitrogen", "soil_phosphorus", "soil_potassium", "soil_temperature", "soil_conductivity", "soil_ph", "air_temperature", "air_humidity"]
+)
+
 st.sidebar.subheader("Data Timeframe")
 timeframe = st.sidebar.selectbox(
     "Select timeframe", 
-    ["All data", "Last hour", "Last 6 hours", "Last day", "Last week", "Last month", "Last quarter", "Last 6 months", "Last year"]
+    ["Last 6 hours", "Last day", "Last week", "Last month", "Last quarter", "Last 6 months", "Last year","All data"]
 )
 
 # Load data
@@ -170,14 +186,13 @@ df = load_data()
 
 # Filter data based on selected timeframe
 if df is not None and len(df) > 0:
-    # now = datetime.now()
     now = datetime.now(pk_tz)
-    # Convert timestamps in df to timezone-aware (if needed)
     if df['timestamp'].dtype == 'datetime64[ns]':
         df['timestamp'] = df['timestamp'].dt.tz_localize('UTC').dt.tz_convert(pk_tz)
     else:
         df['timestamp'] = pd.to_datetime(df['timestamp'], utc=True).dt.tz_convert(pk_tz)
 
+    # Timeframe filter
     if timeframe == "Last hour":
         df = df[df['timestamp'] > (now - timedelta(hours=1))]
     elif timeframe == "Last 6 hours":
@@ -194,6 +209,14 @@ if df is not None and len(df) > 0:
         df = df[df['timestamp'] > (now - timedelta(days=182))]
     elif timeframe == "Last year":
         df = df[df['timestamp'] > (now - timedelta(days=365))]
+
+    # Crop number filter
+    if crop_number != "All":
+        df = df[df["crop_number"] == int(crop_number)]
+
+    # Sensor type filter
+    if sensor_type != "All":
+        df = df[["timestamp", sensor_type]]
 
 # Dashboard Page
 if page == "Dashboard":
