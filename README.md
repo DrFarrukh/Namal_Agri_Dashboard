@@ -2,13 +2,34 @@
 
 This project provides a comprehensive solution for collecting, storing, and visualizing agricultural sensor data in real-time. It consists of an MQTT listener to capture sensor data, a Streamlit web application for data visualization, and setup scripts for easy deployment.
 
+**Developed by**: Electrical Engineering Department, Namal University, Mianwali, Pakistan
+
 ## Features
 
 -   **Real-time Data Ingestion**: An MQTT listener subscribes to a topic to receive sensor data from IoT devices.
 -   **Robust Data Parsing**: The listener can handle various JSON formats, including double-encoded and unescaped strings.
--   **Data Storage**: Sensor data is stored in both CSV (`sensor_data.csv`) and JSON (`sensor_data.json`) formats.
+-   **Dual Data Storage**: Sensor data is stored in both CSV (`sensor_data.csv`) and JSON (`sensor_data.json`) formats for flexibility.
 -   **Interactive Dashboard**: A multi-page Streamlit application visualizes the data with interactive charts, gauges, and metrics.
+-   **Multi-Page Interface**: Dashboard, Detailed Analysis, Historical Data, and About pages.
+-   **Pakistan Time Support**: All timestamps displayed in Pakistan Standard Time (PKT).
+-   **Data Export**: Export filtered data to CSV or JSON formats.
+-   **Automated Insights**: AI-powered recommendations based on sensor readings and optimal ranges.
 -   **Automated Setup**: Shell scripts are provided to automate the setup of the MQTT listener and Streamlit dashboard as systemd services.
+
+## Monitored Parameters
+
+### Soil Parameters
+-   **Soil Moisture**: Water content percentage (0-100%)
+-   **Soil Nitrogen**: Nitrogen content (mg/kg)
+-   **Soil Phosphorus**: Phosphorus content (mg/kg)
+-   **Soil Potassium**: Potassium content (mg/kg)
+-   **Soil Temperature**: Temperature in Celsius (°C)
+-   **Soil Conductivity**: Electrical conductivity (µS/cm)
+-   **Soil pH**: Acidity/alkalinity level (4-9 scale)
+
+### Air Parameters
+-   **Air Temperature**: Ambient temperature (°C)
+-   **Air Humidity**: Relative humidity percentage (%)
 
 ## Prerequisites
 
@@ -122,18 +143,134 @@ To run the Streamlit app locally for development or testing:
 
 ## File Descriptions
 
--   `mqtt_listener.py`: The Python script that listens for MQTT messages and saves them.
--   `streamlit_app.py`: The main application file for the Streamlit dashboard.
--   `requirements.txt`: A list of Python dependencies for the project.
--   `sensor_data.csv`: CSV file for storing sensor data.
--   `sensor_data.json`: JSON file for storing sensor data.
--   `setup_agri_dashboard.sh`: A shell script to automate the deployment of the Streamlit dashboard.
+-   `mqtt_listener.py`: The Python script that listens for MQTT messages and saves them to both CSV and JSON files.
+-   `streamlit_app.py`: The main application file for the Streamlit dashboard with multi-page interface.
+-   `requirements.txt`: A list of Python dependencies for the project (paho-mqtt, streamlit, pandas, plotly, numpy, pytz).
+-   `sensor_data.csv`: CSV file for storing sensor data (auto-generated).
+-   `sensor_data.json`: JSON file for storing sensor data (auto-generated).
+-   `setup_agri_dashboard.sh`: A shell script to automate the deployment of the Streamlit dashboard with NGINX.
 -   `setup_mqtt_listener.sh`: A shell script to set up the MQTT listener as a `systemd` service.
 -   `mqtt-listener.service`: A `systemd` service file for the MQTT listener.
+-   `agri_img.jpg`: Dashboard image asset.
 -   `.gitignore`: Specifies files and directories to be ignored by Git.
+
+## Dashboard Pages
+
+The Streamlit application includes four main pages:
+
+1. **Dashboard**: Real-time sensor readings with gauge visualizations, time-series charts, and AI-powered insights.
+2. **Detailed Analysis**: Statistical summaries, correlation heatmaps, moving averages, and distribution analysis.
+3. **Historical Data**: Date range filtering, data aggregation (hourly/daily/weekly), and data export functionality.
+4. **About**: Project information, monitored parameters, and technology stack details.
+
+## Service Management
+
+### Check Service Status
+```bash
+# Check MQTT listener status
+systemctl status mqtt-listener.service
+
+# Check Streamlit dashboard status
+systemctl status streamlit-dashboard.service
+
+# Check NGINX status
+systemctl status nginx
+```
+
+### View Logs
+```bash
+# MQTT listener logs
+tail -f /home/namal/Namal_Agri_Dashboard/mqtt_error.log
+
+# Streamlit logs
+journalctl -u streamlit-dashboard.service -f
+
+# NGINX logs
+sudo tail -f /var/log/nginx/access.log
+sudo tail -f /var/log/nginx/error.log
+```
+
+### Restart Services
+```bash
+# Restart MQTT listener
+sudo systemctl restart mqtt-listener.service
+
+# Restart Streamlit dashboard
+sudo systemctl restart streamlit-dashboard.service
+
+# Restart NGINX
+sudo systemctl restart nginx
+```
 
 ## Troubleshooting
 
--   **`streamlit run` command not found**: Ensure you have installed the dependencies from `requirements.txt` and that the `streamlit` executable is in your system's `PATH`.
--   **MQTT connection errors**: Check that your MQTT broker is running and that the `broker_address` and `port` in `mqtt_listener.py` are correct.
--   **Dashboard not updating**: Verify that the `mqtt_listener.py` script is running and that new data is being written to `sensor_data.json`.
+### Common Issues and Solutions
+
+-   **`streamlit run` command not found**: 
+    - Ensure you have installed the dependencies from `requirements.txt`
+    - Check that the `streamlit` executable is in your system's `PATH`
+    - Try: `pip install --user streamlit` or `pip3 install streamlit`
+
+-   **MQTT connection errors**: 
+    - Check that your MQTT broker is running: `systemctl status mosquitto`
+    - Verify the `broker_address` and `port` in `mqtt_listener.py` are correct
+    - Test MQTT broker: `mosquitto_sub -h localhost -t agri_sensor/data -v`
+
+-   **Dashboard not updating**: 
+    - Verify that the `mqtt_listener.py` script is running: `systemctl status mqtt-listener.service`
+    - Check that new data is being written to `sensor_data.json`: `tail -f sensor_data.json`
+    - Review MQTT logs: `tail -f mqtt_error.log`
+
+-   **Port 80 access denied**:
+    - Ensure NGINX is running: `systemctl status nginx`
+    - Check firewall settings: `sudo ufw status`
+    - Verify NGINX configuration: `sudo nginx -t`
+
+-   **Data file too large / Performance issues**:
+    - Consider implementing data retention policy (archive old data)
+    - Use database backend (PostgreSQL/InfluxDB) for better performance
+    - Optimize by filtering data in dashboard queries
+
+## Configuration
+
+### MQTT Broker Settings
+Edit `mqtt_listener.py` to configure:
+```python
+broker_address = "localhost"  # Change to your MQTT broker IP
+port = 1883                    # Default MQTT port
+topic = "agri_sensor/data"    # MQTT topic to subscribe
+```
+
+### Dashboard Settings
+The dashboard auto-refreshes by default. You can configure:
+- Refresh interval (5-60 seconds)
+- Time frame filters (hour, day, week, month, quarter, 6 months, year)
+- Data aggregation level (hourly, daily, weekly)
+
+## Technology Stack
+
+-   **Backend**: Python 3.8+
+-   **MQTT Client**: paho-mqtt
+-   **Web Framework**: Streamlit
+-   **Data Visualization**: Plotly
+-   **Data Processing**: Pandas, NumPy
+-   **Timezone Handling**: pytz (Pakistan Standard Time)
+-   **Web Server**: NGINX (reverse proxy)
+-   **Service Management**: systemd
+-   **Storage**: CSV + JSON files
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit issues or pull requests.
+
+## License
+
+This project is developed by the Electrical Engineering Department at Namal University, Mianwali, Pakistan.
+
+## Contact
+
+For questions or support, please contact the Electrical Engineering Department at Namal University.
+
+---
+
+**Copyright © 2025 Farrukh Qureshi. All Rights Reserved.**
