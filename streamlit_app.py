@@ -100,18 +100,18 @@ def clean_and_interpolate_data(df):
     
     return df_clean
 
-def load_data(apply_interpolation=True):
+def load_data(apply_interpolation=True, refresh_interval=REFRESH_INTERVAL):
+    """Load sensor data with optional cleaning. Uses a dynamic cache key based on time bucket.
+    The cache invalidates automatically each refresh_interval seconds."""
     @st.cache_data(show_spinner=False)
-    def _load(interpolate):
+    def _load(interpolate, cache_bucket):
         try:
             df = pd.read_json(JSON_FILE)
             df['timestamp'] = pd.to_datetime(df['timestamp'], unit='s')
             df = df.sort_values('timestamp')
-            
-            # Clean and interpolate data if enabled
+
             if interpolate:
                 df = clean_and_interpolate_data(df)
-            
             return df
         except FileNotFoundError:
             st.error("Sensor data file not found. Please ensure the MQTT listener is running.")
@@ -122,7 +122,10 @@ def load_data(apply_interpolation=True):
         except Exception as e:
             st.error(f"An error occurred: {e}")
             return None
-    return _load(apply_interpolation)
+
+    # Derive a bucket that changes every refresh_interval seconds
+    bucket = int(time.time() // max(refresh_interval, 1))
+    return _load(apply_interpolation, bucket)
 
 def get_optimal_ranges():
     # Define optimal ranges for each parameter
@@ -211,17 +214,27 @@ page = st.sidebar.radio("Navigation", ["Dashboard", "Detailed Analysis", "Histor
 enable_interpolation = st.sidebar.checkbox("Clean data (interpolate outliers)", value=True, help="Remove zeros and outliers, then interpolate missing values for smoother charts")
 
 # Auto-refresh option
-auto_refresh = st.sidebar.checkbox("Auto-refresh", value=False)
+auto_refresh = st.sidebar.checkbox("Auto-refresh", value=True)
 if auto_refresh:
     refresh_interval = st.sidebar.slider("Refresh interval (seconds)", 5, 60, REFRESH_INTERVAL)
     st.sidebar.write(f"Refreshing every {refresh_interval} seconds")
 
 # Data timeframe
 
+# Determine effective refresh interval
+effective_refresh_interval = refresh_interval if auto_refresh else REFRESH_INTERVAL
+
+# Load data early for crop list (raw, no interpolation needed just for options)
+_df_for_crops = load_data(apply_interpolation=False, refresh_interval=effective_refresh_interval)
+if _df_for_crops is not None and "crop_number" in _df_for_crops.columns:
+    crop_values = sorted(set(_df_for_crops["crop_number"].dropna()))
+else:
+    crop_values = []
+
 # Crop number filter
 crop_number = st.sidebar.selectbox(
     "Crop Number (filter)",
-    ["All"] + sorted(set(pd.read_json(JSON_FILE)["crop_number"]))
+    ["All"] + crop_values
 )
 
 # Sensor type filter
@@ -236,8 +249,8 @@ timeframe = st.sidebar.selectbox(
     ["Live (Last 5 min)", "Last hour", "Last 6 hours", "Last day", "Last week", "Last month", "Last quarter", "Last 6 months", "Last year","All data"]
 )
 
-# Load data
-df = load_data(enable_interpolation)
+# Load data (respect interpolation toggle and dynamic refresh interval)
+df = load_data(apply_interpolation=enable_interpolation, refresh_interval=effective_refresh_interval)
 
 # Filter data based on selected timeframe
 if df is not None and len(df) > 0:
@@ -588,11 +601,11 @@ elif page == "Historical Data":
             
             if aggregation != "None":
                 if aggregation == "Hour":
-                    grouped_df = filtered_df.set_index('timestamp').resample('H').mean().reset_index()
+                    grouped_df = filtered_df.set_index('timestamp').resample('H').mean(numeric_only=True).reset_index()
                 elif aggregation == "Day":
-                    grouped_df = filtered_df.set_index('timestamp').resample('D').mean().reset_index()
+                    grouped_df = filtered_df.set_index('timestamp').resample('D').mean(numeric_only=True).reset_index()
                 else:  # Week
-                    grouped_df = filtered_df.set_index('timestamp').resample('W').mean().reset_index()
+                    grouped_df = filtered_df.set_index('timestamp').resample('W').mean(numeric_only=True).reset_index()
                 
                 # Plot aggregated data
                 if len(grouped_df) > 0:
