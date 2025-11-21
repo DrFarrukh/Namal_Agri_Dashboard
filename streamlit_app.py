@@ -53,13 +53,65 @@ JSON_FILE = "sensor_data.json"
 REFRESH_INTERVAL = 5  # seconds
 
 # Helper functions
-def load_data():
+def clean_and_interpolate_data(df):
+    """Clean data by replacing zeros and outliers with interpolated values"""
+    if df is None or len(df) == 0:
+        return df
+    
+    # Define sensor columns to clean
+    sensor_columns = ['soil_moisture', 'soil_nitrogen', 'soil_phosphorus', 'soil_potassium',
+                      'soil_temperature', 'soil_conductivity', 'soil_ph', 
+                      'air_temperature', 'air_humidity']
+    
+    # Define reasonable outlier thresholds based on physical limits
+    outlier_ranges = {
+        'soil_moisture': (0.1, 100),
+        'soil_nitrogen': (0.1, 200),
+        'soil_phosphorus': (0.1, 150),
+        'soil_potassium': (0.1, 500),
+        'soil_temperature': (-10, 60),
+        'soil_conductivity': (0.1, 2000),
+        'soil_ph': (3.0, 10.0),
+        'air_temperature': (-40, 60),
+        'air_humidity': (0.1, 100)
+    }
+    
+    df_clean = df.copy()
+    
+    for col in sensor_columns:
+        if col in df_clean.columns:
+            # Replace exact zeros with NaN (assuming zeros are sensor errors)
+            df_clean.loc[df_clean[col] == 0, col] = np.nan
+            
+            # Replace outliers with NaN
+            if col in outlier_ranges:
+                min_val, max_val = outlier_ranges[col]
+                df_clean.loc[(df_clean[col] < min_val) | (df_clean[col] > max_val), col] = np.nan
+            
+            # Interpolate missing values with a limit to avoid long gaps
+            # Only interpolate up to 10 consecutive missing values (reasonable for short sensor glitches)
+            df_clean[col] = df_clean[col].interpolate(method='linear', limit=10, limit_direction='both')
+            
+            # For remaining NaN (large gaps), use forward fill but limit to 5 values
+            df_clean[col] = df_clean[col].fillna(method='ffill', limit=5)
+            
+            # If still NaN at the beginning, use backward fill with limit
+            df_clean[col] = df_clean[col].fillna(method='bfill', limit=5)
+    
+    return df_clean
+
+def load_data(apply_interpolation=True):
     @st.cache_data(show_spinner=False)
-    def _load():
+    def _load(interpolate):
         try:
             df = pd.read_json(JSON_FILE)
             df['timestamp'] = pd.to_datetime(df['timestamp'], unit='s')
             df = df.sort_values('timestamp')
+            
+            # Clean and interpolate data if enabled
+            if interpolate:
+                df = clean_and_interpolate_data(df)
+            
             return df
         except FileNotFoundError:
             st.error("Sensor data file not found. Please ensure the MQTT listener is running.")
@@ -70,7 +122,7 @@ def load_data():
         except Exception as e:
             st.error(f"An error occurred: {e}")
             return None
-    return _load()
+    return _load(apply_interpolation)
 
 def get_optimal_ranges():
     # Define optimal ranges for each parameter
@@ -155,6 +207,9 @@ st.sidebar.image("https://namal.edu.pk/uploads/logo22869383.png", width=100) # A
 # Navigation
 page = st.sidebar.radio("Navigation", ["Dashboard", "Detailed Analysis", "Historical Data", "About"])
 
+# Data cleaning option
+enable_interpolation = st.sidebar.checkbox("Clean data (interpolate outliers)", value=True, help="Remove zeros and outliers, then interpolate missing values for smoother charts")
+
 # Auto-refresh option
 auto_refresh = st.sidebar.checkbox("Auto-refresh", value=False)
 if auto_refresh:
@@ -178,11 +233,11 @@ sensor_type = st.sidebar.selectbox(
 st.sidebar.subheader("Data Timeframe")
 timeframe = st.sidebar.selectbox(
     "Select timeframe", 
-    ["Last 6 hours", "Last day", "Last week", "Last month", "Last quarter", "Last 6 months", "Last year","All data"]
+    ["Live (Last 5 min)", "Last hour", "Last 6 hours", "Last day", "Last week", "Last month", "Last quarter", "Last 6 months", "Last year","All data"]
 )
 
 # Load data
-df = load_data()
+df = load_data(enable_interpolation)
 
 # Filter data based on selected timeframe
 if df is not None and len(df) > 0:
@@ -193,7 +248,9 @@ if df is not None and len(df) > 0:
         df['timestamp'] = pd.to_datetime(df['timestamp'], utc=True).dt.tz_convert(pk_tz)
 
     # Timeframe filter
-    if timeframe == "Last hour":
+    if timeframe == "Live (Last 5 min)":
+        df = df[df['timestamp'] > (now - timedelta(minutes=5))]
+    elif timeframe == "Last hour":
         df = df[df['timestamp'] > (now - timedelta(hours=1))]
     elif timeframe == "Last 6 hours":
         df = df[df['timestamp'] > (now - timedelta(hours=6))]
